@@ -1,26 +1,35 @@
 import React from "react";
-import axios from 'axios';
-import { setLocalStorage } from "../../utils/Storage";
 import { MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
-import { Redirect } from "react-router-dom";
+import { loginUser } from "../../api/api";
+import { LoginUser } from "../../redux/actions";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Login = () =>{
 
     const [username, setUserName] = React.useState('');
     const [password, setPassword] = React.useState('');
-
+    const [msg, setMsg] = React.useState('');
+    const dispatch = useDispatch();
     const handleSubmit = async()=>{
-        await axios.post('https://node.abraham-mitiku.com/login',{
+        const data = {
             username: username,
             password: password
-        }).then((res)=>{
-            setLocalStorage('accessToken', res.data.accessToken);
-            setLocalStorage('refreshToken', res.data.refreshToken);
-        }).catch(err=>{
-            console.log(err.message)
-        })
+        }
+        console.log(data)
+        let payload = await loginUser(data);
+        dispatch(LoginUser(payload));
     }
+ 
+    const isLogged = useSelector(state => state.isLogged);
    
+    React.useEffect(()=>{
+        if(isLogged){
+           window.location.href = '/dashboard'
+           setMsg('success, redirecting ...')
+        }
+    })
+
     return(
         <div className="text-center">
            <h1 className="h1-responsive">Login Page</h1>
@@ -41,6 +50,9 @@ const Login = () =>{
                    <MDBCol md="3"></MDBCol>
                </MDBRow>
            </MDBContainer>
+           <div className="text-center">
+              <h4 className="text-danger font-weight-bold"> {msg}</h4>
+           </div>
       </div>
     )
 }

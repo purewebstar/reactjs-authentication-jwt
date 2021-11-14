@@ -1,54 +1,50 @@
 import { setLocalStorage, getLocalStorage } from "../utils/Storage";
+import axios from "axios";
+
+const refreshToken = getLocalStorage('refreshToken');
+//const accessToken = getLocalStorage('accessToken');
 
 export const registerUser = async(data)=>{
     return await (
-        axios.post(`https://node.abraham-mitiku.com/register`,{data}).then(res=>{
-          return res.data.message
+        axios.post(`https://localhost:4000/register`,{data}).then(res=>{
+          if(res.status === 201){
+            return true;
+          }
+          else return false;
         }).catch(err=>{
-            return []
+            return false
         })
     )
 }
 
 export const loginUser = async(data)=>{
     return await (
-        axios.post(`https://node.abraham-mitiku.com/register`,{data}).then(res=>{
-            const result = {};
-            result.accessToken = res.data.accessToken;
-            result.refreshToken = res.data.refreshToken;
-            return result;
+        axios.post(`http://localhost:4000/login`,{data}).then(res=>{
+            if(res.status === 200){
+                setLocalStorage('accessToken', res.data.accessToken);
+                setLocalStorage('refreshToken', res.data.refreshToken);
+                return true;
+            }
+            else return false;
         }).catch(err=>{
-            return []
+            return false;
         })
     )
 }
 
-export const userData = async(accessToken)=>{
+export const renewAccessToken = async()=>{
+    const data = {
+        token: refreshToken
+    }
     return await (
-        axios.post(`https://node.abraham-mitiku.com/register`,{
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
+        axios.put(`http://localhost:4000/renew/access-token`,{data}).then(res=>{
+            if(res.status == 201){
+                setLocalStorage('accessToken', res.data.accessToken);
+                return res.data.status;
             }
-        }).then(res=>{
-            return res.data.message;
+            else return false;
         }).catch(err=>{
-            return []
-        })
-    )
-}
-
-export const renewAccessToken = async(refreshToken)=>{
-    return await (
-        axios.post(`https://node.abraham-mitiku.com/register`,{
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${refreshToken}`
-            }
-        }).then(res=>{
-            return res.data.accessToken;
-        }).catch(err=>{
-            return []
+            return false;
         })
     )
 }

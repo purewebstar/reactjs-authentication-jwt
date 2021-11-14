@@ -3,31 +3,21 @@ import Home from "./components/pages/Home";
 import Login from './components/pages/Login';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Dashboard from "./components/pages/Dashboard";
-import axios from "axios";
-import { getLocalStorage, setLocalStorage } from "./utils/Storage";
+import { useDispatch } from "react-redux";
+import { AccessTokenRenewed } from "./redux/actions";
+import { useSelector } from "react-redux";
+import {renewAccessToken} from './api/api';
 
 const App = () =>{
 
-  const[auth, setAuth] = React.useState(true)
-  
-  const refreshToken = getLocalStorage('refreshToken');
+  const dispatch = useDispatch();
 
   const authorize = async()=>{
-    await axios.put('http://localhost:4000/auth/access-token',{
-      token: refreshToken
-    }).then((res)=>{
-        if(res.data.accessToken){
-          setLocalStorage('accessToken', res.data.accessToken)
-          setAuth(true);
-        }
-        else{
-          setAuth(false)
-        }
-    }).catch(err=>{
-      setAuth(false)
-    })
+    let payload = await renewAccessToken();
+    dispatch(AccessTokenRenewed(payload))
   }
 
+  const isAuth = useSelector(state => state.accessTokenRenewed);
   React.useEffect(()=>{
     authorize();
   },[])
@@ -39,7 +29,7 @@ const App = () =>{
             <Route path='/home' component={Home} exact />
             <Route path='/login' component={Login} exact/>
             {
-              (auth )?
+              (isAuth)?
               (
                 <Route path='/dashboard' component={Dashboard} exact />
               )
