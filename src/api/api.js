@@ -3,20 +3,26 @@ import axios from "axios";
 
 const refreshToken = getLocalStorage('refreshToken')?getLocalStorage('refreshToken'): '';
 //const accessToken = getLocalStorage('accessToken');
-
+const apiUri = 'https://api.abraham-mitiku.com/';
 export const registerUser = async(data)=>{
     return await (
-        axios.post(`https://localhost:4000/register`,{data}).then(res=>{
-          return true;
+        axios.post(`${apiUri}register`,{
+            username: data.username,
+            password: data.password
+        }).then(res=>{
+          if(res.status === 201){
+            return true;
+          }
+          else return res.data.message;
         }).catch(err=>{
-            return false;
+            return 'User Exist!';
         })
     )
 }
 
 export const loginUser = async(data)=>{
     return await (
-        axios.post(`http://localhost:4000/login`,{
+        axios.post(`${apiUri}login`,{
             username: data.username,
             password: data.password
         }).then(res=>{
@@ -28,17 +34,17 @@ export const loginUser = async(data)=>{
             }
             else{
                 setLocalStorage('isLogged', false);
-                return false;
+                return res.data.message;
             }
         }).catch(err=>{
-            return false;
+            return 'Username or Password incorrect!';
         })
     )
 }
 
 export const renewAccessToken = async()=>{
     return await (
-        axios.put(`http://localhost:4000/renew/access-token`,{
+        axios.put(`${apiUri}renew/access-token`,{
             token: refreshToken
         }).then(res=>{
             if(res.status === 201){

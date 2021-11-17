@@ -1,11 +1,13 @@
 import React from "react";
-import { MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
+import { MDBCol, MDBContainer, MDBRow } from "mdbreact";
 import { loginUser } from "../../api/api";
 import { LoginUser } from "../../redux/actions";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import $ from 'jquery'
 
 const Login = () =>{
-
+    const history = useHistory();
     const [username, setUserName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [msg, setMsg] = React.useState('');
@@ -20,26 +22,36 @@ const Login = () =>{
         if(payload){
             window.location.href = '/dashboard'
         }else{
+            $('input').val('')
             window.location.href = '/login'
         }
     }
 
     return(
         <div className="text-center">
-           <h1 className="h1-responsive">Login Page</h1>
+           <h1 className="h1-responsive mt-5">Login Page</h1>
            <MDBContainer>
                <MDBRow>
                    <MDBCol md="3"></MDBCol>
-                   <MDBCol md="6" className="mt-5">
-                   <input 
+                   <MDBCol md="6" className="mt-5 border border-info p-4">           
+                    <label htmlFor="defaultFormLoginEmailEx" className="grey-text text-left">
+                    Your username
+                    </label>
+                    <input 
                         type="text" className="form-control"
                         onChange={e => setUserName(e.target.value)}
                     />
+                     <br />
+                    <label htmlFor="defaultFormLoginPasswordEx" className="grey-text text-left">
+                    Your password
+                    </label>
                     <input 
                         type="password" className="form-control"
                     onChange={e => setPassword(e.target.value)}
                     />
+                    <div className="text-center mt-4">
                     <button className="btn btn-info" onClick={handleSubmit}>login</button>
+                    </div>
                    </MDBCol>
                    <MDBCol md="3"></MDBCol>
                </MDBRow>

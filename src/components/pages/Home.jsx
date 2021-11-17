@@ -1,10 +1,13 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { registerUser } from "../../api/api";
 import { RegisterUser } from "../../redux/actions";
+import $ from 'jquery';
+import { useHistory } from "react-router";
 
 const Home = () =>{
+    const history = useHistory();
     const [username, setUserName] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [msg, setMsg] = React.useState('');
@@ -16,32 +19,43 @@ const Home = () =>{
         }
         let payload = await registerUser(data);
         dispatch(RegisterUser(payload));
-    }
- 
-    const isRegistered = useSelector(state => state.registered);
-   
-    React.useEffect(()=>{
-        if(isRegistered){
-           window.location.href = '/login'
+        if(payload){
+            window.location.href = '/login'
+        }else{
+            $('input').val('')
+            setMsg(payload);
+            window.location.href = '/register'
         }
-    })
-   
+    }
+
     return(
         <div className="text-center">
-           <h1 className="h1-responsive">Register Page</h1>
+           <h1 className="h1-responsive mt-5">Register Page</h1>
+           <h4 className="h4-responsive font-weight-bold mt-3 text-danger">
+             {msg}
+           </h4>
            <MDBContainer>
                <MDBRow>
                    <MDBCol md="3"></MDBCol>
-                   <MDBCol md="6" className="mt-5">
-                   <input 
+                   <MDBCol md="6" className="mt-5 border border-info p-4">
+                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text text-left">
+                    Your username
+                    </label>
+                    <input 
                         type="text" className="form-control"
                         onChange={e => setUserName(e.target.value)}
                     />
+                     <br />
+                    <label htmlFor="defaultFormLoginPasswordEx" className="grey-text text-left">
+                    Your password
+                    </label>
                     <input 
-                        type="password" className="form-control mt-1"
+                        type="password" className="form-control"
                     onChange={e => setPassword(e.target.value)}
                     />
-                    <button className="btn btn-success" onClick={handleSubmit}>Register</button>
+                    <div className="text-center mt-4">
+                    <button className="btn btn-info" onClick={handleSubmit}>Register</button>
+                    </div>
                    </MDBCol>
                    <MDBCol md="3"></MDBCol>
                </MDBRow>

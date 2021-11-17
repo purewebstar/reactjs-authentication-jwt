@@ -2,6 +2,7 @@
   "name": "reactjs-authentication-jwt",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://admin.abraham-mitiku.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",

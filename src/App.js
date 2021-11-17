@@ -19,7 +19,7 @@ const App = () =>{
   const auth = getLocalStorage('isLogged');
   React.useEffect(()=>{
     authorize();
-  },[])
+  })
   return (
     <div className="App">
       <Router>
