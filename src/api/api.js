@@ -3,7 +3,7 @@ import axios from "axios";
 
 const refreshToken = getLocalStorage('refreshToken')?getLocalStorage('refreshToken'): '';
 //const accessToken = getLocalStorage('accessToken');
-const apiUri = 'https://api.abraham-mitiku.com/';
+const apiUri = 'https://node.abraham-mitiku.com/';
 export const registerUser = async(data)=>{
     return await (
         axios.post(`${apiUri}register`,{
