@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import Dashboard from "./components/pages/Dashboard";
 import { useDispatch } from "react-redux";
 import { AccessTokenRenewed } from "./redux/actions";
-import { useSelector } from "react-redux";
 import {renewAccessToken} from './api/api';
+import { getLocalStorage } from "./utils/Storage";
 
 const App = () =>{
 
@@ -16,8 +16,7 @@ const App = () =>{
     let payload = await renewAccessToken();
     dispatch(AccessTokenRenewed(payload))
   }
-
-  const isAuth = useSelector(state => state.accessTokenRenewed);
+  const auth = getLocalStorage('isLogged');
   React.useEffect(()=>{
     authorize();
   },[])
@@ -29,7 +28,7 @@ const App = () =>{
             <Route path='/home' component={Home} exact />
             <Route path='/login' component={Login} exact/>
             {
-              (isAuth)?
+              (auth)?
               (
                 <Route path='/dashboard' component={Dashboard} exact />
               )

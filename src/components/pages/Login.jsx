@@ -2,7 +2,6 @@ import React from "react";
 import { MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
 import { loginUser } from "../../api/api";
 import { LoginUser } from "../../redux/actions";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 const Login = () =>{
@@ -16,19 +15,14 @@ const Login = () =>{
             username: username,
             password: password
         }
-        console.log(data)
         let payload = await loginUser(data);
         dispatch(LoginUser(payload));
-    }
- 
-    const isLogged = useSelector(state => state.isLogged);
-   
-    React.useEffect(()=>{
-        if(isLogged){
-           window.location.href = '/dashboard'
-           setMsg('success, redirecting ...')
+        if(payload){
+            window.location.href = '/dashboard'
+        }else{
+            window.location.href = '/login'
         }
-    })
+    }
 
     return(
         <div className="text-center">
