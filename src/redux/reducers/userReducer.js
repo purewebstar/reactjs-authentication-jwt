@@ -8,11 +8,6 @@ const initialState = {
 
 const userReducer = (state = initialState, action)=>{
     switch(action.type){
-        case 'AUTHORIZED': 
-           return{
-               ...state,
-               isAuth: action.payload
-           }
         case 'ACCESS_TOKEN_RENEWED':
             return{
                 ...state,

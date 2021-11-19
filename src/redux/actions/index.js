@@ -1,11 +1,4 @@
 
-export const Authorized = (payload)=>{
-   return{
-       type: 'AUTHORIZED',
-       payload: payload
-   }
-}
-
 export const AccessTokenRenewed = (payload)=>{
     return{
         type: 'ACCESS_TOKEN_RENEWED',
