@@ -6,3 +6,9 @@ export const LoginUser = (payload) =>{
     }
 }
 
+export const UserData = (payload) =>{
+    return{
+        type: 'USER_DATA',
+        payload: payload
+    }
+}

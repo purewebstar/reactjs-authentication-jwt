@@ -2,7 +2,7 @@ import { setLocalStorage, getLocalStorage, clearLocalStorage } from "../utils/St
 import axios from "axios";
 
 const refreshToken = getLocalStorage('refreshToken')?getLocalStorage('refreshToken'): '';
-//const accessToken = getLocalStorage('accessToken');
+const accessToken = getLocalStorage('accessToken');
 const apiUri = 'http://localhost:4000';
 
 export const registerUser = async(data)=>{
@@ -60,6 +60,43 @@ export const renewAccessToken = async()=>{
         }).catch(err=>{
             setLocalStorage('isLogged', false)
             return false;
+        })
+    )
+}
+
+export const authRefreshToken = async ()=>{
+    return await (
+        axios.post(`${apiUri}/refresh-token`,{
+            token: refreshToken
+        }).then(res=>{
+            if(res.status === 200){
+                setLocalStorage('isLogged', true)
+                return true;
+            }
+            else{
+                setLocalStorage('isLogged', res.false);
+                return false;
+            }
+        }).catch(err=>{
+            setLocalStorage('isLogged', false)
+            return false;
+        })
+    )
+}
+
+export const getUserData = async ()=>{
+    return await (
+        axios.get(`${apiUri}/user`,{
+            headers:{
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(res=>{
+            if(res.status === 200){
+                return res.data.user;
+            }
+            else return null;
+        }).catch(err=>{
+            return null;
         })
     )
 }

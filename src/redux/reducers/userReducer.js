@@ -1,6 +1,7 @@
 
 const initialState = {
     isLogged: false,
+    user_data: null
 }
 
 const userReducer = (state = initialState, action)=>{
@@ -9,6 +10,11 @@ const userReducer = (state = initialState, action)=>{
             return{
                 ...state,
                 isLogged: action.payload
+            }
+        case "USER_DATA":
+            return{
+                ...state,
+                user_data: action.payload
             }
         default:
             return state;
