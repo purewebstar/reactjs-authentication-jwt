@@ -8,6 +8,8 @@ const apiUri = 'http://localhost:4000';
 export const registerUser = async(data)=>{
     return await (
         axios.post(`${apiUri}/register`,{
+            first_name: data.first_name,
+            last_name: data.last_name,
             username: data.username,
             password: data.password
         }).then(res=>{

@@ -6,14 +6,20 @@ import $ from 'jquery';
 const Home = () =>{
     const [username, setUserName] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
     const [msg, setMsg] = React.useState('');
     const handleSubmit = async(e)=>{
         e.preventDefault();
-        if(!username || !password || username==='' || password===''){
+        if(!username || !password || username==='' || password===''||
+           !firstName || !lastName || firstName===''|| lastName===''
+        ){
             setMsg('Input fields are requred!');
         }
         else{
             const data = {
+                first_name: firstName,
+                last_name: lastName,
                 username: username,
                 password: password
             }
@@ -35,14 +41,27 @@ const Home = () =>{
                    <MDBCol md="3"></MDBCol>
                    <MDBCol md="6" className="mt-5 border border-info p-4">
                    <label htmlFor="defaultFormLoginEmailEx" className="grey-text text-left">
+                    First-name
+                    </label>
+                    <input 
+                        type="text" className="form-control"
+                        onChange={e => setFirstName(e.target.value)}
+                    />
+                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text text-left mt-2">
+                    Last-name
+                    </label>
+                    <input 
+                        type="text" className="form-control"
+                        onChange={e => setLastName(e.target.value)}
+                    />
+                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text text-left mt-2">
                     Your username
                     </label>
                     <input 
                         type="text" className="form-control"
                         onChange={e => setUserName(e.target.value)}
                     />
-                     <br />
-                    <label htmlFor="defaultFormLoginPasswordEx" className="grey-text text-left">
+                    <label htmlFor="defaultFormLoginPasswordEx" className="grey-text text-left mt-2">
                     Your password
                     </label>
                     <input 
